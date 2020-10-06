@@ -1,21 +1,29 @@
-from random import seed, randrange, random
-
 import numpy as np
 
 
-def get_input_layer(filename):
+def get_input_layers(filename):
     file = open(filename, 'r')
     str_input = file.read()
     input_layer = np.array(list(str_input))
     return input_layer
 
 
-# TODO: use *kwargs to modify this function for vector generation
-def init_matrix(num_of_rows, num_of_column):
-    matrix = np.random.rand(num_of_rows, num_of_column)
+def apply_sigmoid(array):
+    return 1 / (1 + np.exp(-array))
+
+
+def init_matrix(*dimensional):
+    if len(dimensional) > 2:
+        raise ValueError
+    matrix = np.random.rand(*dimensional)
     return matrix
 
 
+def forward_propagate(matrix, input_layer, bias_vector):
+    bias_vector = np.zeros(1)
+    output_layer = apply_sigmoid(matrix * input_layer + bias_vector)
+    return output_layer
+
+
 if __name__ == "__main__":
-    W = init_matrix(25, 5)
-    print(W)
+    A = init_matrix(3)
