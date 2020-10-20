@@ -15,10 +15,10 @@ class Service:
     def __init__(self):
         self.cost_values = []
 
-    def append_cost_value(self, value):
+    def append_cost_value(self, value: float) -> None:
         self.cost_values.append(value)
 
-    def create_training_set(self, directory_path: str, category: int):
+    def create_training_set(self, directory_path: str, category: int) -> None:
         output_file = open(f"category_{category}.txt", 'w')
 
         for file_name in Path(directory_path).iterdir():
@@ -31,7 +31,7 @@ class Service:
             output_file.close()
 
     @staticmethod
-    def png_to_array(filename: Union[str, Path]):
+    def png_to_array(filename: Union[str, Path]) -> list:
         img = Image.open(filename).convert('RGBA')
         pixels = np.array(img)
         output_array = []
@@ -63,7 +63,7 @@ class Service:
 
         return training_set[:100]
 
-    def show_plot(self, num_of_epoch, mini_set_size, eta):
+    def show_plot(self, num_of_epoch: int, mini_set_size: int, eta: float) -> None:
         figire, ax = plt.subplots(figsize=(10, 5), dpi=100)
         ax.set_title("Функция стоимости С(w,b)")
         ax.set_ylabel("Значения функции стоимости")
