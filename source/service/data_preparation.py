@@ -1,5 +1,7 @@
-from PIL import Image
 import numpy as np
+import matplotlib.pyplot as plt
+
+from PIL import Image
 from pathlib import Path
 from typing import Union
 from random import shuffle
@@ -10,24 +12,11 @@ data_item = namedtuple("data_item", ["input", "category"])
 
 class Service:
 
-    @staticmethod
-    def get_training_set(file_names: list, quantity_of_categories: int) -> list:
-        training_set = []
-        category = -1
-        for file_name in file_names:
-            category += 1
-            file = open(file_name, 'r')
-            for line in file:
-                activation_vector = np.array(list(map(float, line.rstrip().split(" ")))).reshape(-1, 1)
-                category_vector = np.zeros(quantity_of_categories).reshape(-1, 1)
-                category_vector[category] = 1
-                training_set.append((activation_vector, category_vector))
-            else:
-                file.close()
-        else:
-            shuffle(training_set)
+    def __init__(self):
+        self.cost_values = []
 
-        return training_set[:100]
+    def append_cost_value(self, value):
+        self.cost_values.append(value)
 
     def create_training_set(self, directory_path: str, category: int):
         output_file = open(f"category_{category}.txt", 'w')
@@ -54,3 +43,33 @@ class Service:
                 else:
                     output_array.append(0)
         return output_array
+
+    @staticmethod
+    def get_training_set(file_names: list, quantity_of_categories: int) -> list:
+        training_set = []
+        category = -1
+        for file_name in file_names:
+            category += 1
+            file = open(file_name, 'r')
+            for line in file:
+                activation_vector = np.array(list(map(float, line.rstrip().split(" ")))).reshape(-1, 1)
+                category_vector = np.zeros(quantity_of_categories).reshape(-1, 1)
+                category_vector[category] = 1
+                training_set.append((activation_vector, category_vector))
+            else:
+                file.close()
+        else:
+            shuffle(training_set)
+
+        return training_set[:100]
+
+    def show_plot(self, num_of_epoch, mini_set_size, eta):
+        figire, ax = plt.subplots(figsize=(10, 5), dpi=100)
+        ax.set_title("Функция стоимости С(w,b)")
+        ax.set_ylabel("Значения функции стоимости")
+        ax.set_xlabel("Итерации обучения")
+
+        plt.plot(self.cost_values, c='blue', label=f"Число эпох: {num_of_epoch}, Размер пакета {mini_set_size}, "
+                                                   f"Коэффициент сходимости: {eta}")
+        plt.legend(loc="upper left")
+        plt.show()

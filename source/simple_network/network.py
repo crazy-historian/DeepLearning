@@ -5,14 +5,16 @@ from service.data_preparation import Service
 
 class Network:
     def __init__(self, layers: list, num_of_categoris: int, file_names: list):
+        self.service = Service()
+        self.file_names = file_names
+
         self.num_of_layers = len(layers)
         self.num_of_categories = num_of_categoris
-        self.service = Service()
         self.layers = layers
-        self.file_names = file_names
         self.weights = [self.init_matrix((j, i)) for i, j in zip(self.layers[:-1], self.layers[1:])]
         self.biases = [self.init_matrix((i, 1)) for i in self.layers[1:]]
 
+    # TODO: перемишивать мини батч
     def stochastic_gradient_descent(self, epochs, mini_training_set_size, eta):
         training_set = net.service.get_training_set(self.file_names, self.num_of_categories)
         training_set_size = len(training_set)
@@ -63,6 +65,7 @@ class Network:
             activation = self.apply_sigmoid(z_vector)
             activations.append(activation)
 
+        self.service.append_cost_value(self.calculate_cost(expected_result, activations[-1]))
         # error calculation for output activation
         delta = self.calculate_derivative_cost(expected_result, activations[-1]) * self.apply_derivative_sigmoid(z_vectors[-1])
 
@@ -94,13 +97,12 @@ class Network:
     def apply_derivative_sigmoid(self, vector: np.array):
         return self.apply_sigmoid(vector) * (1 - self.apply_sigmoid(vector))
 
-    # @staticmethod
-    # def calculate_cost(expected_res, real_res):
-    #     cost = 0
-    #     for i in range(len(real_res)):
-    #         cost += (expected_res[i] - real_res[i]) ** 2
-    #
-    #     return cost
+    @staticmethod
+    def calculate_cost(expected_res, real_res):
+        cost = 0
+        for item in range(len(real_res)):
+            cost += (float(expected_res[item]) - float(real_res[item])) ** 2
+        return cost
 
     @staticmethod
     def calculate_derivative_cost(expected_res: np.array, real_res: np.array) -> np.array:
@@ -118,7 +120,8 @@ if __name__ == "__main__":
     # net.service.create_training_set("D:\DeepLearning\dataset\input_directory\category_4", 4)
     # net.service.create_training_set("D:\DeepLearning\dataset\input_directory\category_5", 5)
 
-    net.stochastic_gradient_descent(30, 5, 3.0)
+    net.stochastic_gradient_descent(30, 10, 3.5)
+    net.service.show_plot(30, 10, 3.5)
     for i in range(1, 6):
         print(f"Изображение категории: {i}")
         print(net.forward_propagation(np.array(net.service.png_to_array(f"pixel_{i}.png"))))
