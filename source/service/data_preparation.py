@@ -16,9 +16,20 @@ class Service:
         self.cost_values = []
 
     def append_cost_value(self, value: float) -> None:
+        """
+
+        :param value: значение функции стоимости
+        :return:
+        """
         self.cost_values.append(value)
 
     def create_training_set(self, directory_path: str, category: int) -> None:
+        """
+
+        :param directory_path: путь до файла
+        :param category: номер категории
+        :return:
+        """
         output_file = open(f"category_{category}.txt", 'w')
 
         for file_name in Path(directory_path).iterdir():
@@ -32,6 +43,11 @@ class Service:
 
     @staticmethod
     def png_to_array(filename: Union[str, Path]) -> list:
+        """
+
+        :param filename: имя файла с изображением
+        :return:
+        """
         img = Image.open(filename).convert('RGBA')
         pixels = np.array(img)
         output_array = []
@@ -46,6 +62,12 @@ class Service:
 
     @staticmethod
     def get_training_set(file_names: list, quantity_of_categories: int) -> list:
+        """
+
+        :param file_names: имена файлов с переведенными в текст изображениями
+        :param quantity_of_categories: число категорий распознаваемых образов
+        :return:
+        """
         training_set = []
         category = -1
         for file_name in file_names:
@@ -64,6 +86,13 @@ class Service:
         return training_set[:100]
 
     def show_plot(self, num_of_epoch: int, mini_set_size: int, eta: float) -> None:
+        """
+
+        :param num_of_epoch: число эпох обучения
+        :param mini_set_size: размер мини пакета
+        :param eta: коэфициент сходимости
+        :return:
+        """
         figire, ax = plt.subplots(figsize=(10, 5), dpi=100)
         ax.set_title("Функция стоимости С(w,b)")
         ax.set_ylabel("Значения функции стоимости")
