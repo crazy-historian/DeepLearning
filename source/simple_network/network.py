@@ -3,6 +3,9 @@ from typing import List, Tuple
 from service.data_preparation import Service
 
 
+# TODO: Нужно тестировать на тестовоом наборе?
+
+
 class Network:
     def __init__(self, layers: List[int], num_of_categories: int, file_names: List[str]):
         """
@@ -193,9 +196,9 @@ if __name__ == "__main__":
     # for i in range(1, 6):
     #     net.service.create_training_set(f"D:\DeepLearning\dataset\input_directory\category_{i}", i)
 
-    net.stochastic_gradient_descent(30, 10, 3.5)
+    net.stochastic_gradient_descent(15, 5, 3.5)
 
-    net.service.show_plot(30, 10, 3.5)
+    net.service.show_plot(15, 5, 3.5)
 
     # тестирование нейросети
     for number in range(1, 6):

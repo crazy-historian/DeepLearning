@@ -9,6 +9,8 @@ from collections import namedtuple
 
 data_item = namedtuple("data_item", ["input", "category"])
 
+# TODO: добавить функцию искажения входных образов
+
 
 class Service:
 
@@ -17,6 +19,8 @@ class Service:
 
     def append_cost_value(self, value: float) -> None:
         """
+            Добавить значение функции стоимости в список
+        для дальнейшего построения графика
 
         :param value: значение функции стоимости
         :return:
@@ -25,6 +29,8 @@ class Service:
 
     def create_training_set(self, directory_path: str, category: int) -> None:
         """
+            Функция, осуществляющая преобразования множества изображений
+        в один текстовый файл
 
         :param directory_path: путь до файла
         :param category: номер категории
@@ -44,6 +50,7 @@ class Service:
     @staticmethod
     def png_to_array(filename: Union[str, Path]) -> list:
         """
+            Преобразование изображения в текстовую строку
 
         :param filename: имя файла с изображением
         :return:
@@ -63,6 +70,7 @@ class Service:
     @staticmethod
     def get_training_set(file_names: list, quantity_of_categories: int) -> list:
         """
+            Подготовка всего обучающего набора
 
         :param file_names: имена файлов с переведенными в текст изображениями
         :param quantity_of_categories: число категорий распознаваемых образов
